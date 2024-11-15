@@ -36,13 +36,6 @@
     <div class="container" id="container"></div>
 
     <script>
-        // 文本数据
-        const texts = [
-            "文本一", "文本二", "文本三", "文本四",
-            "文本五", "文本六", "文本七", "文本八",
-            "文本九", "文本十"
-        ];
-
         const container = document.getElementById('container');
         const containerWidth = container.offsetWidth;
         const containerHeight = container.offsetHeight;
@@ -60,7 +53,7 @@
         }
 
         // 动态展示文本数据
-        function displayTexts() {
+        function displayTexts(texts) {
             container.innerHTML = ''; // 清空容器
 
             texts.sort(() => 0.5 - Math.random()); // 随机打乱顺序
@@ -88,11 +81,19 @@
             });
         }
 
-        // 每隔一段时间刷新文本展示
-        setInterval(displayTexts, 5000);
+        // 从JSON文件加载数据
+        function loadTextData() {
+            fetch('data.json')
+                .then(response => response.json())
+                .then(data => {
+                    displayTexts(data.texts);
+                    setInterval(() => displayTexts(data.texts), 5000);
+                })
+                .catch(error => console.error('Error loading text data:', error));
+        }
 
-        // 初次调用
-        displayTexts();
+        // 初始化
+        loadTextData();
     </script>
 </body>
 </html>

@@ -23,46 +23,53 @@
 
 要将上面的代码展示为网页，你可以按照以下步骤操作：
 
-### 方法 1：直接保存为 HTML 文件并用浏览器打开
+因为浏览器的跨域资源共享（CORS）限制。浏览器限制直接从 `file://` 协议访问本地文件，因此 `fetch` 无法从本地文件系统加载 `data.json`。
 
-1. **新建一个文件**，并命名为`index.html`。
-2. 将上面的代码复制到这个文件中并保存。
-3. 双击`index.html`文件，或者右键选择“使用浏览器打开”（例如 Chrome、Firefox 等）。
+### 方法 1：使用本地 HTTP 服务器运行项目
 
-   这样就可以在浏览器中查看到网页效果。
+如前面提到的，您可以通过本地服务器来绕过这些限制。这是最推荐的做法。
 
-### 方法 2：在本地启动一个简单的 HTTP 服务器
+1. **使用 Python**（在 HTML 和 JSON 文件所在目录下运行以下命令）：
 
-如果希望在本地模拟服务器环境运行这个 HTML 文件，可以使用 Python 的内置 HTTP 服务器。
-
-1. 打开命令行（在文件夹中按住 Shift+右键，然后选择“在此处打开命令行”）。
-2. 运行以下命令（假设 Python 已安装）：
-
-   - 对于 **Python 3**：
+   - 对于 Python 3：
 
      ```bash
      python -m http.server 8000
      ```
 
-   - 对于 **Python 2**：
+   - 对于 Python 2：
 
      ```bash
      python -m SimpleHTTPServer 8000
      ```
 
-3. 打开浏览器，访问`http://localhost:8000/index.html`，就可以在本地查看网页了。
+   然后在浏览器中访问 `http://localhost:8000/index.html`，这样就可以正常加载 `data.json`。
 
-### 方法 3：使用在线 HTML 编辑器
+2. **使用 VS Code 的 Live Server 插件**
+   - 如果您使用的是 Visual Studio Code，可以安装 **Live Server** 插件。
+   - 打开 `index.html` 文件，右键选择“Open with Live Server”，这将自动启动本地服务器并打开浏览器访问页面。
 
-如果你不想在本地操作，可以将代码粘贴到在线 HTML 编辑器中，例如：
+### 方法 2：修改浏览器启动参数（仅用于测试，不推荐在生产环境中使用）
 
-- [CodePen](https://codepen.io/)
-- [JSFiddle](https://jsfiddle.net/)
-- [JSBin](https://jsbin.com/)
+在开发阶段可以绕过 CORS 检查，但这仅用于本地调试，不推荐用于正式环境。
 
-在这些平台上，粘贴代码后即可实时预览效果。
+- 在 Windows 上，可以通过以下方式打开 Chrome 并禁用 CORS 检查：
 
-### 方法 4：部署到 GitHub Pages
+  1. 关闭所有 Chrome 窗口。
+  2. 打开命令提示符（CMD）。
+  3. 运行以下命令（假设 Chrome 安装在默认路径）：
+
+     ```bash
+     "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="C:\chrome_dev"
+     ```
+
+  4. 用此窗口打开 `index.html`。
+
+这样 Chrome 会在无 CORS 限制的模式下运行，但请注意关闭它后，再正常启动浏览器时将恢复安全设置。
+
+最好的方法是使用 **方法 1**，通过本地 HTTP 服务器来加载页面和数据文件。这样可以避免 CORS 问题，同时符合正式开发和生产环境的最佳实践。
+
+### 方法 3：部署到 GitHub Pages
 
 1. 创建一个 GitHub 仓库，将`index.html`上传到仓库的根目录。
 2. 在 GitHub 仓库页面，打开**Settings**，找到**GitHub Pages**设置，选择`main`分支并保存。
