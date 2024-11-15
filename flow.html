@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态流动文本展示</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            overflow: hidden;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .text-item {
+            position: absolute;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container"></div>
+
+    <script>
+        // 文本数据
+        const texts = [
+            "文本一", "文本二", "文本三", "文本四",
+            "文本五", "文本六", "文本七", "文本八",
+            "文本九", "文本十"
+        ];
+
+        const container = document.getElementById('container');
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+
+        // 随机位置和颜色生成
+        function getRandomPosition() {
+            return {
+                x: Math.random() * (containerWidth - 100),
+                y: Math.random() * (containerHeight - 50)
+            };
+        }
+
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 100%, 50%)`;
+        }
+
+        // 动态展示文本数据
+        function displayTexts() {
+            container.innerHTML = ''; // 清空容器
+
+            texts.sort(() => 0.5 - Math.random()); // 随机打乱顺序
+
+            texts.forEach(text => {
+                const textItem = document.createElement('div');
+                textItem.className = 'text-item';
+                textItem.innerText = text;
+                
+                const { x, y } = getRandomPosition();
+                textItem.style.left = `${x}px`;
+                textItem.style.top = `${y}px`;
+                textItem.style.color = getRandomColor();
+
+                container.appendChild(textItem);
+
+                // 添加动画效果
+                setTimeout(() => {
+                    textItem.style.opacity = 1; // 淡入
+                }, Math.random() * 1000);
+
+                setTimeout(() => {
+                    textItem.style.opacity = 0; // 淡出
+                }, 3000 + Math.random() * 2000);
+            });
+        }
+
+        // 每隔一段时间刷新文本展示
+        setInterval(displayTexts, 5000);
+
+        // 初次调用
+        displayTexts();
+    </script>
+</body>
+</html>
